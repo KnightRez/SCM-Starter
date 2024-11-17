@@ -9,6 +9,8 @@ contract Assessment {
 
     event Deposit(uint256 amount);
     event Withdraw(uint256 amount);
+    event Double(uint256 balance);
+    event Half(uint256 balance);
 
     constructor(uint initBalance) payable {
         owner = payable(msg.sender);
@@ -17,6 +19,22 @@ contract Assessment {
 
     function getBalance() public view returns(uint256){
         return balance;
+    }
+
+    function doubleBalance() public payable {
+        uint _previousBalance = balance;
+        require(msg.sender == owner, "You are not the owner of this account");
+        balance += balance;
+        assert(balance == _previousBalance + balance);
+        emit Double(balance);
+    }
+
+    function halfBalance() public payable {
+        uint _previousBalance = balance;
+        require(msg.sender == owner, "You are not the owner of this account");
+        balance -= balance / 2;
+        assert(balance == _previousBalance - balance / 2);
+        emit Half(balance);
     }
 
     function deposit(uint256 _amount) public payable {
