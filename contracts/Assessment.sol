@@ -21,20 +21,19 @@ contract Assessment {
         return balance;
     }
 
-    function doubleBalance() public payable {
+    function guess(bool result) public payable {
+        if (balance == 0) revert("Insufficient Balance");
         uint _previousBalance = balance;
         require(msg.sender == owner, "You are not the owner of this account");
-        balance += balance;
-        assert(balance == _previousBalance + balance);
-        emit Double(balance);
-    }
-
-    function halfBalance() public payable {
-        uint _previousBalance = balance;
-        require(msg.sender == owner, "You are not the owner of this account");
-        balance -= balance / 2;
-        assert(balance == _previousBalance - balance / 2);
-        emit Half(balance);
+        if (result) {
+            balance += balance;
+            assert(balance == _previousBalance + _previousBalance);
+            emit Double(balance);
+        } else {
+            balance -= balance / 2;
+            assert(balance == _previousBalance - _previousBalance  / 2);
+            emit Half(balance);
+        }
     }
 
     function deposit(uint256 _amount) public payable {
